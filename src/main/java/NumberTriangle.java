@@ -89,7 +89,15 @@ public class NumberTriangle {
      */
     public int retrieve(String path) {
         // TODO implement this method
-        return -1;
+        if (path.isEmpty()) {
+            return this.getRoot();
+        }
+        else if (path.charAt(0) == 'l') {
+            return this.left.retrieve(path.substring(1));
+        }
+        else {
+            return this.right.retrieve(path.substring(1));
+        }
     }
     /** Read in the NumberTriangle structure from a file.
      *
@@ -113,10 +121,11 @@ public class NumberTriangle {
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
-
+        NumberTriangle top = null;
+        NumberTriangle[] prev = null;
+        NumberTriangle[] curr = null;
 
         String line = br.readLine();
-        NumberTriangle top = new NumberTriangle(Integer.parseInt(line));
         while (line != null) {
 
             // remove when done; this line is included so running starter code prints the contents of the file
@@ -125,31 +134,27 @@ public class NumberTriangle {
             // TODO process the line
             String[] newLine = line.split(" ");
 
-            NumberTriangle[] nodes = new NumberTriangle[newLine.length];
+            prev = curr;
+
+            curr = new NumberTriangle[newLine.length];
             for (int i = 0; i < newLine.length; i++) {
-                nodes[i] = new NumberTriangle(Integer.parseInt(newLine[i]));
+                curr[i] = new NumberTriangle(Integer.parseInt(newLine[i]));
             }
 
-            if (nodes.length == 2) {
-                top.setLeft(nodes[0]);
-                top.setRight(nodes[1]);
+            if (top == null) {
+                top = curr[0];
+            }
+
+
+            if (prev != null) {
+                for (int i = 0; i < prev.length; i++) {
+                    prev[i].setLeft(curr[i]);
+                    prev[i].setRight(curr[i + 1]);
+                }
             }
 
             //read the next line
             line = br.readLine();
-            if (line != null) {
-                String[] newLine2 = line.split(" ");
-
-                NumberTriangle[] newNodes = new NumberTriangle[newLine2.length];
-                for (int i = 0; i < newLine2.length; i++) {
-                    newNodes[i] = new NumberTriangle(Integer.parseInt(newLine2[i]));
-                }
-
-                for (int i = 0; i < nodes.length; i++) {
-                    nodes[i].left = newNodes[i];
-                    nodes[i].right = newNodes[i + 1];
-                }
-            }
         }
         br.close();
         return top;
