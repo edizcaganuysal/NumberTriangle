@@ -124,13 +124,15 @@ public class NumberTriangle {
 
             // TODO process the line
             String[] newLine = line.split(" ");
-            if (newLine.length == 1) {
-                top.root = Integer.parseInt(newLine[0]);
-            }
 
             NumberTriangle[] nodes = new NumberTriangle[newLine.length];
             for (int i = 0; i < newLine.length; i++) {
                 nodes[i] = new NumberTriangle(Integer.parseInt(newLine[i]));
+            }
+
+            if (nodes.length == 2) {
+                top.setLeft(nodes[0]);
+                top.setRight(nodes[1]);
             }
 
             //read the next line
